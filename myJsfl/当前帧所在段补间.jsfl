@@ -2,8 +2,12 @@ var doc = fl.getDocumentDOM();
 var timeLine = doc.getTimeline();
 var selections =doc.selection;
 
+alert("此次你选择的元件个数有：" +selections.length + ",注意一个图层一个元件哈");
 //调用方法
-createTween(selections[0]);
+for (var i = 0; i < selections.length; i++) {
+    createTween(selections[i]);
+}
+
 
 /**
  * 当前选择的元件，当前侦，前后关键帧 创建 传统补间并且设置缓动强度
@@ -16,10 +20,21 @@ function createTween(selectionElement){
     // timeLine.layer[1].createMotionTween(strf,endf);
     //1.找到被选中的元素的图层
     var layer = selectionElement.layer;
+    var ele = layer.frames[timeLine.currentFrame].elements;
+    if (ele.length!=1){
+        alert("此次你选择的东西中，有图层 是含有多个元件， 不能完成补间 "+ " 图层名字为：" + layer.name);
+    }
     //当前侦
     var currentFrame = timeLine.currentFrame;
     //获取当前所选帧数的 左边关键帧数 selectionElement.layer.frames[currentFrame].startFrame+1
     var startKey = selectionElement.layer.frames[currentFrame].startFrame+1;
+    var index = timeLine.findLayerIndex(layer.name);
+    if (index.length>1){
+        alert("你的图层有重复的名字+" +layer.name + "  请检查");
+        return;
+    }
+    timeLine.setSelectedLayers(index[0]);
+
     timeLine.createMotionTween(startKey,currentFrame);
     layer.frames[currentFrame].tweenEasing = 100;
 }
