@@ -28,7 +28,7 @@ function insertKeyFrame(FrameNum){
  * 这里调用完成的功能就是在当前侦 插入关键帧
  * */
 insertKeyFrame(timeline.currentFrame);//调用一次 那就是创建一个关键帧在当前帧数
-insertKeyFrame(timeline.currentFrame+1);//调用两次， 就是打双帧， 当前侦跟后一个帧都转换为关键帧
+// insertKeyFrame(timeline.currentFrame+1);//调用两次， 就是打双帧， 当前侦跟后一个帧都转换为关键帧
 // 等价于
 //timeline.insertKeyframe(timeline.currentFrame);
 //timeline.insertKeyframe(timeline.currentFrame+1);
