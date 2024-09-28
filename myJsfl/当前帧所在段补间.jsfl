@@ -23,6 +23,7 @@ function createTween(selectionElement){
     var ele = layer.frames[timeLine.currentFrame].elements;
     if (ele.length!=1){
         alert("此次你选择的东西中，有图层 是含有多个元件， 不能完成补间 "+ " 图层名字为：" + layer.name);
+        return;
     }
     //当前侦
     var currentFrame = timeLine.currentFrame;
@@ -55,3 +56,5 @@ function areSure(){
     }
     return false;
 }
+// 优化功能， 一般都是  创建关键帧之后， 在后面那段进行 补间  此处优化
+// 优化功能2  摄像头那边 选择不了  也是补间的。  这边有些
