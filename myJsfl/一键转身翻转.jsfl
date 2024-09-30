@@ -15,37 +15,6 @@ function fangdai(num){
 
 overturn();
 
-/**
- * 根据 选中 元素 获取图层对象， 并且设置 timeline 选中这个图层
- * @param element
- */
-function selectLayerByElement(element){
-    //根据图层名字  找到对应的 图层索引， 图层名字可能有重复 循环对象去比对， 最好还是改名字  这里暂时不改名字
-    //这就是对象所在的图层  获取所在图层对象
-    var layer = element.layer;
-
-    //根据 图层名字 找到的 索引数组
-    var indexArr= timeline.findLayerIndex(layer.name);
-    if (indexArr.length===0){
-        alert("该图层名字没有找到对应的索引");
-    }
-    //如果长度大于1
-    if (indexArr.length>1){
-        for (var i = 0; i < indexArr.length; i++) {
-            if (timeline.layers[j] === layer){
-                timeline.setSelectedLayers(i);
-                break;
-            }
-        }
-        for (var j = 0; j < timeline.layers.length; j++) {
-            if(timeline.layers[j] === layer){
-                indexTrue = j;
-            }
-        }
-    }else{
-        timeline.setSelectedLayers(indexArr[0]);
-    }
-}
 
 //优化 一键翻身。 可以选择多个元件翻转
 // 1.弹出确认框， 确定右边， 错误左边
@@ -68,18 +37,21 @@ function overturn(){
     //此处设置翻转完成之后关键的位置
     var nextThreeFrameNum = nextTowFrameNum +1;
 
+
     ////一个元件， 一个图层 进行完成
     for (var i = 0; i < selection.length; i++) {
         //1， 获取第一个选中的元件对象  与 所在图层对象
         var element = selection[i];
         var layer = element.layer;//这就是对象所在的图层
 
+        //插入关键帧之前就要先选择图层先，  因为多个元件 是选中的最下面那个图层
+        //2. 多个元素循环的时候 就要根据元件 确认对应的图层  函数 可以找对应的看  这一步得优先
+
+        selectLayerByElement(element);
+
         //判断当前帧是否为关键帧，如果当前侦 不是关键帧， 那就进行插入
         var startFrame = layer.frames[currentFrameNum].startFrame; //因为是所以， 必须要+1
         if (startFrame+1 != currentFrameNum)timeline.insertKeyframe(currentFrameNum)
-
-        //2. 多个元素循环的时候 就要根据元件 确认对应的图层  函数 可以找对应的看
-        selectLayerByElement(element);
 
         //3. 写一个关键帧位置 插入 关键帧
         timeline.insertKeyframe(nextOneFrameNum);
@@ -148,7 +120,87 @@ function overturn(){
 
     }
 
+    var pathNameHead = "voice/摇头.mp3";//自己那个声音的路径
+    var pathNameCloth = "voice/衣服抖动cloth.wav";//自己那个声音的路径
+
+    //如果只有一个元素 我就默认是转头， 如果是选中连个元素 那就默认是翻身
+    if (selection.length===1){
+        addSounds(currentFrameNum,pathNameHead)
+    }else{
+        addSounds(currentFrameNum,pathNameCloth)
+    }
+
 }
+
+
+//优化功能： 转身 创建图层 voice 然后添加制定的音频
+// The following example adds the currently selected item to the Stage at the (3, 60) position:
+//     fl.getDocumentDOM().library.addItemToDocument({x:3, y:60});
+//
+// The following example adds the item Symbol1 located in folder1 of the library to the Stage at the (550, 485) position:
+//     fl.getDocumentDOM().library.addItemToDocument({x:550.0, y:485.0}, "folder1/Symbol1");
+//"ac-audio affects/character movement/衣服抖动+3.clothwav"
+/**
+ * 想舞台中添加声音 会创建一个图层为 voice
+ * @param frameNum 帧数
+ * @param pathName 文件滤镜
+ */
+function addSounds(frameNum,pathName){
+    var numbers = timeline.findLayerIndex("voice") || [];
+    //多个
+    var voiceIndex = -1;
+    if (numbers.length>1){
+        alert("关于voice 的图层有多个， 请先改名");
+        return;
+    }
+    //没有
+    if (numbers.length === 0){
+        voiceIndex = timeline.addNewLayer("voidce","normal",true);
+    }else{
+        voiceIndex = numbers[0];
+    }
+    //要插入的帧。
+    var layer = timeline.layers[voiceIndex];
+    //判断当前帧是否为关键帧，如果当前侦 不是关键帧， 那就进行插入
+    var startFrame = layer.frames[frameNum].startFrame; //因为是所以， 必须要+1
+    if (startFrame+1 != frameNum)timeline.insertKeyframe(frameNum);
+
+    fl.getDocumentDOM().library.addItemToDocument({x:0, y:0}, pathName);//搜索图层  voice  没有就要新建一个voice
+}
+
+/**
+ * 根据 选中 元素 获取图层对象， 并且设置 timeline 选中这个图层
+ * @param element
+ */
+function selectLayerByElement(element){
+    //根据图层名字  找到对应的 图层索引， 图层名字可能有重复 循环对象去比对， 最好还是改名字  这里暂时不改名字
+    //这就是对象所在的图层  获取所在图层对象
+    var layer = element.layer;
+    alert(layer.name)
+    //根据 图层名字 找到的 索引数组
+    var indexArr= timeline.findLayerIndex(layer.name);
+    if (indexArr.length===0){
+        alert("该图层名字没有找到对应的索引");
+    }
+    //如果长度大于1
+    if (indexArr.length>1){
+        for (var i = 0; i < indexArr.length; i++) {
+            if (timeline.layers[j] === layer){
+                timeline.setSelectedLayers(i);
+                break;
+            }
+        }
+        for (var j = 0; j < timeline.layers.length; j++) {
+            if(timeline.layers[j] === layer){
+                indexTrue = j;
+            }
+        }
+    }else{
+        timeline.setSelectedLayers(indexArr[0]);
+    }
+}
+
+
 //
 // // 2.整合方法，无论选择一个还是多个 循环进行翻转
 // if (selection.length>0){
