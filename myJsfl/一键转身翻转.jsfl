@@ -176,7 +176,7 @@ function selectLayerByElement(element){
     //根据图层名字  找到对应的 图层索引， 图层名字可能有重复 循环对象去比对， 最好还是改名字  这里暂时不改名字
     //这就是对象所在的图层  获取所在图层对象
     var layer = element.layer;
-    alert(layer.name)
+    // alert(layer.name)
     //根据 图层名字 找到的 索引数组
     var indexArr= timeline.findLayerIndex(layer.name);
     if (indexArr.length===0){
