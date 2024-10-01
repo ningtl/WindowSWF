@@ -155,7 +155,8 @@ function addSounds(frameNum,pathName){
     }
     //没有
     if (numbers.length === 0){
-        voiceIndex = timeline.addNewLayer("voidce","normal",true);
+        alert(numbers.length)
+        voiceIndex = timeline.addNewLayer("voice","normal",true);
     }else{
         voiceIndex = numbers[0];
     }
