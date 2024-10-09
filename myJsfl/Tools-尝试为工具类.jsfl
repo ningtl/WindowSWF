@@ -1,7 +1,7 @@
 
 var doc = fl.getDocumentDOM();
 var selection = doc.selection;
-getName()
+
 function getName(){
     var ele = selection[0];
     if (ele.elementType == "instance" && ele.instanceType==="symbol" && ele.libraryItem) {
@@ -71,3 +71,110 @@ function getNameWithEleName(name){
     }
     return uniqueData;
 }
+/*
+
+function bindEventHandler(element, scriptName) {
+    element.addEventListener(MouseEvent.CLICK, function(event) {
+        MMExecute("fl.runScript(fl.configURI + \"WindowSWF/myJsfl/" + scriptName + ".jsfl\");");
+    });
+}
+
+
+
+ */
+ */
+ */
+
+// 使用辅助函数绑定事件
+bindEventHandler(danZhen, "当前选中位置打单帧");
+bindEventHandler(zhuanShen, "一键转身翻转");
+bindEventHandler(buJian, "当前帧所在段补间");
+bindEventHandler(daoZhuan, "旋转180度并放大1.5倍");
+bindEventHandler(xieShang, "斜向上35度");
+bindEventHandler(yaoTou, "没有补间的摇头");
+bindEventHandler(taiTou, "一键抬头");
+bindEventHandler(xunHuanDanZhen, "单帧循环");
+bindEventHandler(guanLianDanZhen, "一键整理元件到文件夹");
+
+var timeline = an.getDocumentDOM().getTimeline();
+timeline.advancedLayersEnabled = false;
+
+
+
+/* Mouse Click 事件
+单击此指定的元件实例会执行您可在其中添加自己的自定义代码的函数。
+
+说明:
+1. 在以下"// 开始您的自定义代码"行后的新行上添加您的自定义代码。
+单击此元件实例时，此代码将执行。
+*/
+//单帧
+//此处绑定 那个 按钮要绑定上面的函数  danZhen-上面那个函数名字
+danZhen.addEventListener(MouseEvent.CLICK, danZhenHandler);
+//指定点击之后要 触发的函数
+function danZhenHandler(event:MouseEvent):void{
+    //这个函数  替换自己的 脚本路径  基本上只要替换 后面中文名字就行了
+    MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/当前选中位置打单帧.jsfl\" );");
+}
+
+//转身
+function zhuanShenHandler(event:MouseEvent):void
+    {
+        MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/一键转身翻转.jsfl\" );");
+//trace("已单击鼠标"); 打印到输出的函数
+
+}
+zhuanShen.addEventListener(MouseEvent.CLICK, zhuanShenHandler);
+
+//补间
+function buJianHandler(event:MouseEvent):void{
+    MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/当前帧所在段补间.jsfl\" );");
+}
+buJian.addEventListener(MouseEvent.CLICK, buJianHandler);
+
+
+//倒转
+function daoZhuanHandler(event:MouseEvent):void
+    {
+        MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/旋转180度并放大1.5倍.jsfl\" );");
+}
+daoZhuan.addEventListener(MouseEvent.CLICK, daoZhuanHandler);
+
+
+//斜上
+function xieShangHandler(event:MouseEvent):void
+    {
+        MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/斜向上35度.jsfl\" );");
+}
+xieShang.addEventListener(MouseEvent.CLICK, xieShangHandler);
+
+//摇头
+function yaoTouHandler(event:MouseEvent):void
+    {
+        MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/没有补间的摇头.jsfl\" );");
+}
+yaoTou.addEventListener(MouseEvent.CLICK, yaoTouHandler);
+
+//抬头
+function taiTouHandler(event:MouseEvent):void
+    {
+        MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/一键抬头.jsfl\" );");
+}
+taiTou.addEventListener(MouseEvent.CLICK, taiTouHandler);
+
+//循环单帧
+function xunHuanDanZhenHandler(event:MouseEvent):void
+    {
+        MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/单帧循环.jsfl\" );");
+}
+xunHuanDanZhen.addEventListener(MouseEvent.CLICK, xunHuanDanZhenHandler);
+
+//文件关联 一键整理元件到文件夹
+function guanLianDanZhenHandler(event:MouseEvent):void
+    {
+        MMExecute("fl.runScript( fl.configURI + \"WindowSWF/myJsfl/一键整理元件到文件夹.jsfl\" );");
+}
+guanLian.addEventListener(MouseEvent.CLICK, guanLianDanZhenHandler);
+
+
+*/
