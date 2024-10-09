@@ -163,6 +163,7 @@ function addSounds(frameNum,pathName){
     //要插入的帧。
     var layer = timeline.layers[voiceIndex];
     //判断当前帧是否为关键帧，如果当前侦 不是关键帧， 那就进行插入
+    timeline.setSelectedLayers(voiceIndex,true);
     var startFrame = layer.frames[frameNum].startFrame; //因为是所以， 必须要+1
     if (startFrame+1 != frameNum)timeline.insertKeyframe(frameNum);
 
