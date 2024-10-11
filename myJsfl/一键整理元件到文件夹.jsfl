@@ -2,6 +2,8 @@ var doc = fl.getDocumentDOM();//文档
 var selection = doc.selection;//选择
 var library = doc.library;//库文件
 
+//判断位图，
+
 function fangdai(num){
     if (doc==null) {
         alert("兄弟你的动画文档都打开 怎么搞？")
@@ -24,14 +26,15 @@ function getName(){
     //只能是图形元件，并且是库里面有的才能进行整理
     if (ele.elementType == "instance" && ele.instanceType==="symbol" && ele.libraryItem) {
             var name = ele.libraryItem.name;
-            var names = getNameWithEleName(name,0,2,nestedElements);
+            var names = getNameWithEleName(name,0,3,nestedElements);
             var items = library.items;
-
+            var strings = name.split("/");
         //创建文件夹，层级夹一个“/”
         var folderName = "";
             for (var level in names) {
 
-                folderName += "/"+level;
+                var name = level==1 ? strings[strings.length-1]+"_xx": level
+                folderName += "/"+name;
                 if (names.hasOwnProperty(level)) { // 检查属性是否确实存在于nestedElements对象上
                     fl.trace("层级 " + level + " 包含的元素有：");
                     //添加判断是否存在库中
@@ -52,6 +55,7 @@ function getName(){
     else {
         alert("不是元件了");
     }
+    doc.exitEditMode();
 }
 
 function getNameWithEleName(name, depth, maxDepth,nestedElements) {
@@ -84,32 +88,48 @@ function getNameWithEleName(name, depth, maxDepth,nestedElements) {
     // 遍历时间轴上的每一层和帧
     for (var layerIndex = 0; layerIndex < timeline.layers.length; layerIndex++) {
         var layer = timeline.layers[layerIndex];
-        for (var frameIndex = 0; frameIndex < layer.frames.length; frameIndex++) {
-            var frame = layer.frames[frameIndex];
-            //只去找关键帧， 不去找其他普通帧 索引  必须加1
-            var startFrame = frame.startFrame+1;
-            if (frameNum!=startFrame){
-                frameNum=startFrame;
-                for (var elementIndex = 0; elementIndex < frame.elements.length; elementIndex++) {
-                    var element = frame.elements[elementIndex];
-                    if (element.elementType === "instance" && element.instanceType === "symbol" && element.libraryItem) {
-                        var nestedSymbolName = element.libraryItem.name;
-
-                        // 检查是否已添加过该名称
-                        if (nameArr.indexOf(nestedSymbolName) === -1) {
-                            if (nameArr.indexOf(nestedSymbolName)===-1){
-                                nameArr.push(nestedSymbolName);
-                                // fl.trace(nestedSymbolName);
-                                // 递归调用以获取更深层的嵌套
-                                var nestedNames = getNameWithEleName(nestedSymbolName, depth + 1, maxDepth,nestedElements);
-                                nameArr = nameArr.concat(nestedNames); // 将深层嵌套的名称添加到数组中
-                            }
+        var keyFrames = getKeyFrames(layer);//抽取关键帧数组索引，害得拿对象？下面
+        fl.trace(keyFrames);
+        for (var frameIndex = 0; frameIndex < keyFrames.length; frameIndex++) {
+            var frame = layer.frames[keyFrames[frameIndex]];
+            if (!frame){
+                alert(keyFrames[frameIndex]);
+            }
+            for (var elementIndex = 0; elementIndex < frame.elements.length; elementIndex++) {
+                var element = frame.elements[elementIndex];
+                if (element.elementType === "instance" && element.instanceType === "symbol" && element.libraryItem) {
+                    var nestedSymbolName = element.libraryItem.name;
+                    // 检查是否已添加过该名称
+                    if (nameArr.indexOf(nestedSymbolName) === -1) {
+                        if (nameArr.indexOf(nestedSymbolName)===-1){
+                            nameArr.push(nestedSymbolName);
+                            // fl.trace(nestedSymbolName);
+                            // 递归调用以获取更深层的嵌套
+                            var nestedNames = getNameWithEleName(nestedSymbolName, depth + 1, maxDepth,nestedElements);
+                            nameArr = nameArr.concat(nestedNames); // 将深层嵌套的名称添加到数组中
                         }
                     }
+                }else{
                 }
             }
         }
     }
     library.editItem(name);
     return nestedElements;
+}
+
+//获取关键帧数组索引
+function getKeyFrames(layer){
+    var frames = layer.frames;
+
+    var keyFrames = [];
+    for (var i = frames.length - 1; i >= 0; i--) {
+        //情景模拟， 95  80  20  1 是关键帧
+        //获取关键帧数
+        var frameNum = frames[i];//i=100
+        var startFrame = frameNum.startFrame;//95
+        i=startFrame;// 跳过 100-95序列
+        keyFrames.push(startFrame); //95帧关键帧记录，//索引加1
+    }
+    return keyFrames;
 }

@@ -46,3 +46,26 @@ function addSounds(frameNum,pathName){
 
     fl.getDocumentDOM().library.addItemToDocument({x:0, y:0}, pathName);//搜索图层  voice  没有就要新建一个voice
 }
+
+var doc = fl.getDocumentDOM();
+// 获取当前打开的 Flash（Animate）文档的文档对象模型（DOM），并将其赋值给变量 doc。
+// 通过这个文档对象，可以访问和操作当前文档的各种属性和方法，比如获取时间轴、选择的对象、图层等。
+
+var timeline = doc.getTimeline();
+// 使用前面获取到的文档对象 doc，调用其 getTimeline 方法来获取当前文档的时间轴对象，并将其赋值给变量 timeline。
+// 时间轴对象包含了文档中的所有图层、帧以及与时间轴相关的信息，可以通过这个对象进行对时间轴的各种操作，如插入关键帧、设置帧属性、查找图层等。
+
+// 在当前时间轴的当前帧插入关键帧
+timeline.insertKeyframe(timeline.currentFrame);
+
+// 获取当前图层当前帧的第一个元素
+var element;
+var frameElements = timeline.layers[timeline.currentLayer].frames[timeline.currentFrame].elements;
+if (frameElements.length > 0) {
+    element = frameElements[0];
+} else {
+    alert("图层上没有东西");
+}
+
+// 设置元素循环模式为“loop”
+element.loop = "loop";

@@ -25,6 +25,10 @@ function getName(){
 function getNameWithEleName(name){
     //进入编辑模式  获取时间轴
     library.editItem(name);
+    doc.selectNone();//取消选择
+    var elements = frame.elements;//获取帧的素有元素
+    //写个for循环， 匹配
+    elements[0].libraryItem.name;//库中的名字进行匹配
 
     var nameArr = [];
     //重新获得 时间轴
