@@ -72,6 +72,7 @@ function headMovement() {
 
         timeline.createMotionTween(currentFrame, finalFrame);
         layer.frames[currentFrame].tweenEasing = easing;
+        timeline.currentFrame+=1;
     }
 
     // 动画完成后显示提示

@@ -1,90 +1,89 @@
 /**
  * @another {b站 见水中月}
- * @文件放置位置：C:\Users\{自己的用户文件夹}\AppData\Local\Adobe\Animate 2024\zh_CN\Configuration\Commands
- * @看主页教程视频更详细
  */
 
-//1.获取文档级别变量
-var doc = fl.getDocumentDOM();//获取文档对象，就是你当前打开的那个文件，比如 test.fla, 这个文件的所有内容都在这个对象里面
-var timeline = doc.getTimeline(); //获取时间轴对象，就是 软件的 时间轴那个界面的所有数据， 比如图层-layer  帧-frame 都在这个对象里面
-var selection = doc.selection;//获取当前选中的对象数组， 就是你在界面 选中的对象，可能多个就是数组了
-function fangdai(num){
-    if (doc==null) {
-        alert("兄弟你的动画文档都打开 怎么搞？")
-        return 1;
+var doc = fl.getDocumentDOM();
+var timeline = doc.getTimeline();
+var selection = doc.selection;
+
+function checkDoc() {
+    if (!doc) {
+        alert("兄弟，你的动画文档都没打开，怎么搞？");
+        return false;
     }
-    if (num === 0){
-        alert("兄弟，你没有选择元件啊， 我要对什么操作呢？");
-        return 1;
-    }
+    return true;
 }
 
-insertKeyFrameBySelection();
-
-/**
- * 将你选择的元件所在的图层 所在的当前值 插入关键正
- * 如果图层名字有重复的那么久 提示
- * 并且之后 元件为单帧
- */
-function insertKeyFrameBySelection(){
-    if (fangdai(selection.length)){//防止小呆呆一样的操作
+function insertKeyFrameBySelection() {
+    // 检查是否有打开的文档
+    if (!checkDoc()) {
         return;
     }
-    //循环 选中对象
-    for (var i = 0; i < selection.length; i++) {
-        //获取 但个元件 对象
-        var element = selection[i];
 
-        //获取当前所在图层对象
+    // 如果没有选择任何元素
+    if (selection.length === 0) {
+        var layer1 = timeline.layers[0];
+        var layerType = layer1.layerType;
+
+        // 检查是否在摄像机图层上
+        if (layerType === "camera") {
+            timeline.setSelectedLayers(0);
+            timeline.insertKeyframe(timeline.currentFrame);
+            // fl.trace("已在摄像机图层插入关键帧。");
+        } else {
+            alert("没有选择元件所在的图层，也没有摄像机图层，无法插入关键帧。");
+        }
+        return;
+    }
+
+    var savedSelectionList = fl.getDocumentDOM().getTimeline().getSelectedFrames();
+    // fl.trace(savedSelectionList)
+    var currentFrame = timeline.currentFrame;
+    alert(currentFrame)
+    // 循环选中的对象
+    for (var i = 0; i < selection.length; i++) {
+        var element = selection[i]; // 获取选中元件
+
+        // 获取元件所在的图层
         var layer = element.layer;
 
-        // 时间轴 通过 图层名字 查找对应的下边， 可能会有重名的 图层名字， 提示用户进行修改名字
-        var numbers = timeline.findLayerIndex(layer.name);
-        if (numbers.length>1){
-            alert("你的图层名字有重复，请检查修改图层名字:  " + layer.name)
+        // 通过图层名称查找图层索引
+        var layerIndices = timeline.findLayerIndex(layer.name);
+
+        if (layerIndices.length > 1) {
+            alert("你的图层名字有重复，请检查并修改图层名字：" + layer.name);
+
             return;
-        }else if (numbers.length ===0){
-            alert("根据图层名字找不到所在图层的索引:  " + layer.name)
+        } else if (layerIndices.length === 0) {
+            alert("找不到图层的索引，请检查图层名称：" + layer.name);
             return;
         }
 
-        //选定当前图层
-        timeline.currentLayer = numbers[0];
-
-        //在当前帧数 插入关键帧
-        timeline.insertKeyframe(timeline.currentFrame);
-
-        //选择图层进行一个刷新图层的操作
-        timeline.setSelectedLayers(numbers[0]);
+        var layerIndex = layerIndices[0];
+        timeline.currentLayer = layerIndex;
+        // 在当前帧插入关键帧
+        timeline.insertKeyframe(currentFrame);
     }
-    //最后一个键进行选中可跳帧单帧还是什么
-    var element = timeline.layers[timeline.currentLayer].frames[timeline.currentFrame].elements[0];
-    // * @since Flash MX 2004
-    //  * @type {"loop"|"play once"|"single frame"}
-    //  */
-    // SymbolInstance.prototype.loop = undefined;
-    element.loop="single frame"; //设置你的元件单帧  循环 播放一次
-    element.selected=true;
+    for (var i = 0; i < savedSelectionList.length/3; i++) {
+        savedSelectionList[i*3+1]= currentFrame;
+        savedSelectionList[i*3+2]= currentFrame+1;
+    }
+
+    // 设置最后一个元素的播放方式为单帧播放
+    var lastElements = timeline.layers[timeline.currentLayer].frames[timeline.currentFrame].elements;
+    lastElements.forEach(function (ele){
+        ele.loop = "single frame";  // 设置为单帧循环播放
+        ele.selected = true;
+        // fl.trace("已将元件设置为单帧循环播放。");
+    })
+    // Do something that changes the selection.
+    fl.getDocumentDOM().getTimeline().setSelectedFrames(savedSelectionList);
 
 }
 
-// function insertKeyFrame(FrameNum){
-//     //时间轴对象， 插入关键帧  其实你可以直接拿这句话用  这里只是方便理解方法
-//     var currentFrame = timeline.currentFrame;
-//     var currentLayer = timeline.currentLayer;
-//     timeline.insertKeyframe(FrameNum);
-//     fl.getDocumentDOM().selection[0].firstFrame;
-//     var element = timeline.layers[currentLayer].frames[currentFrame].elements[0];
-//     element.selected=true;
-// }
-// frame.motionTweenOrientToPath
-/**
- * 上面那个方法的调用
- * 这个括号里面就是你需要填入的参数，  这里 timeline.currentFrame 还就是当前时间轴的那个帧
- * 这里调用完成的功能就是在当前侦 插入关键帧
- * */
-// insertKeyFrame(timeline.currentFrame);//调用一次 那就是创建一个关键帧在当前帧数
-// insertKeyFrame(timeline.currentFrame+1);//调用两次， 就是打双帧， 当前侦跟后一个帧都转换为关键帧
-// 等价于
-//timeline.insertKeyframe(timeline.currentFrame);
-//timeline.insertKeyframe(timeline.currentFrame+1);
+// 调用插入关键帧函数
+/*
+*
+* */
+insertKeyFrameBySelection();
+

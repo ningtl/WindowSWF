@@ -28,3 +28,35 @@ function getKeyFrames(layer){
     }
     return keyFrames;
 }
+
+
+
+function getTimeLine(){
+    // 获取当前文档的DOM
+    var doc = fl.getDocumentDOM();
+
+// 获取当前选中的对象数组
+    var selection = doc.selection;
+
+// 如果没有选中任何对象，则输出提示信息
+    if (selection.length === 0) {
+        fl.trace("没有选中任何对象");
+    } else {
+        // 遍历选中的对象
+        for (var i = 0; i < selection.length; i++) {
+            // 获取选中对象的库元件
+            var symbol = selection[i].libraryItem;
+
+            // 确保库元件存在且有时间轴
+            if (symbol && symbol.timeline) {
+                // 获取第一个图层的帧数（通常所有图层帧数相同）
+                var totalFrames = symbol.timeline.layers[0].frames.length;
+
+                // 输出总帧数
+                fl.trace("选中的对象 " + (i + 1) + " 的库元件时间轴总帧数是: " + totalFrames);
+            } else {
+                fl.trace("选中的对象 " + (i + 1) + " 没有有效的库元件或时间轴。");
+            }
+        }
+    }
+}

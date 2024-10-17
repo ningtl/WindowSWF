@@ -133,6 +133,8 @@ function overturn(){
 }
 
 
+
+
 //优化功能： 转身 创建图层 voice 然后添加制定的音频
 // The following example adds the currently selected item to the Stage at the (3, 60) position:
 //     fl.getDocumentDOM().library.addItemToDocument({x:3, y:60});
@@ -201,6 +203,47 @@ function selectLayerByElement(element){
         timeline.setSelectedLayers(indexArr[0]);
     }
 }
+//调用方法示例fitler
+function test(){
+    var laryer = null; //自己获取的图层对象
+    var frameNum = 0; //自己想要刷入的帧数
+    var blurFilter = createBlurFilter(40,4,100);
+    pushFilter(laryer,frameNum,blurFilter)
+}
+
+/**
+ * 刷入路径
+ * @param layer 要划入的图层
+ * @param frameNum 要刷入的帧索引，我还没测试要不要-1  比如要刷10帧 实际是填9帧。有测试的兄弟测试完回来告诉我
+ * @param fitler 要刷入的 滤镜对象
+ */
+function pushFilter(layer,frameNum,fitler){
+    var blurFilter = createBlurFilter(40, 4, 100);
+    //将 模糊滤镜刷入 图层过滤器 指定 帧
+    var filters = layer.getFiltersAtFrame(frameNum) || [];
+    //输入数组
+    filters.push(fitler);
+    layer.setFiltersAtFrame(frameNum, filters);// 帧级别 生成模糊滤镜
+}
+
+/**
+ * 创建模糊滤镜
+ * @param blurX x强度
+ * @param blurY y强度
+ * @param strength 强度
+ * @returns {{strength, blurY, enable: boolean, blurX, name: string}}
+ */
+function createBlurFilter(blurX, blurY, strength) {
+    var blurFilter = {
+        "name": "blurFilter",
+        "enable": true,
+        "blurX": blurX,
+        "blurY": blurY,
+        "strength": strength
+    }
+    return blurFilter;
+}
+
 
 
 //
@@ -316,13 +359,3 @@ function changeElementType() {
 }
 */
 
-function createBlurFilter(blurX, blurY, strength) {
-    var blurFilter = {
-        "name": "blurFilter",
-        "enable": true,
-        "blurX": blurX,
-        "blurY": blurY,
-        "strength": strength
-    }
-    return blurFilter;
-}
