@@ -83,7 +83,8 @@ function flipVertical() {
     } else {
         fl.trace('没有复制到任何对象。');
     }
-    fl.trace('背景拓展完成。');
+   
     fl.getDocumentDOM().exitEditMode();
     // 退出编辑模式，并给出提示信息。
+  alert('背景拓展完成。');
 }
