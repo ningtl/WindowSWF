@@ -37,3 +37,5 @@ function loopSinger(){
         ele.loop= "single frame";
     }
 }
+
+

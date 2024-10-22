@@ -19,7 +19,6 @@ function insertKeyFrameBySelection() {
     if (!checkDoc()) {
         return;
     }
-
     // 如果没有选择任何元素
     if (selection.length === 0) {
         var layer1 = timeline.layers[0];
@@ -28,8 +27,7 @@ function insertKeyFrameBySelection() {
         // 检查是否在摄像机图层上
         if (layerType === "camera") {
             timeline.setSelectedLayers(0);
-            timeline.insertKeyframe(timeline.currentFrame);
-            // fl.trace("已在摄像机图层插入关键帧。");
+            timeline.convertToKeyframes(timeline.currentFrame);
         } else {
             alert("没有选择元件所在的图层，也没有摄像机图层，无法插入关键帧。");
         }
@@ -37,9 +35,7 @@ function insertKeyFrameBySelection() {
     }
 
     var savedSelectionList = fl.getDocumentDOM().getTimeline().getSelectedFrames();
-    // fl.trace(savedSelectionList)
     var currentFrame = timeline.currentFrame;
-    alert(currentFrame)
     // 循环选中的对象
     for (var i = 0; i < selection.length; i++) {
         var element = selection[i]; // 获取选中元件
@@ -62,7 +58,7 @@ function insertKeyFrameBySelection() {
         var layerIndex = layerIndices[0];
         timeline.currentLayer = layerIndex;
         // 在当前帧插入关键帧
-        timeline.insertKeyframe(currentFrame);
+        timeline.convertToKeyframes(currentFrame);
     }
     for (var i = 0; i < savedSelectionList.length/3; i++) {
         savedSelectionList[i*3+1]= currentFrame;
@@ -74,9 +70,7 @@ function insertKeyFrameBySelection() {
     lastElements.forEach(function (ele){
         ele.loop = "single frame";  // 设置为单帧循环播放
         ele.selected = true;
-        // fl.trace("已将元件设置为单帧循环播放。");
     })
-    // Do something that changes the selection.
     fl.getDocumentDOM().getTimeline().setSelectedFrames(savedSelectionList);
 
 }
