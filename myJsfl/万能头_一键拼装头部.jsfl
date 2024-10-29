@@ -11,7 +11,8 @@ function findSymbolItemByLibName(libName){
 }
 
 createHeadModel();
-
+// 一个表情需要的长度
+var EXPRESSION_LENGTH = 40;
 /**
  * 操作手则
  1. 模型文件放到固定的文件目录---根目录/见月模型文件夹- 头部模型
@@ -114,7 +115,7 @@ function createHeadModel(){
     var allEle = doc.selection;
     doc.selectNone();
     var tl = fl.getDocumentDOM().getTimeline();
-    var length = allEle.length*200;
+    var length = allEle.length*8;
     tl.insertFrames(length);
     tl.setLayerProperty("name","MovingHead","all"),
     tl.addNewLayer("MovingExpression","normal");
@@ -135,7 +136,7 @@ function createHeadModel(){
     var frames = getKeyFrames(tl.layers[0]);
     for (var i = frames.length - 1; i >= 0; i--) {
         tl.currentFrame = i;
-        tl.insertFrames(199);
+        tl.insertFrames(7);
     }
     doc.exitEditMode();
 }
