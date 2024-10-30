@@ -4,8 +4,9 @@
 function pasteInPlace(){
     var doc = fl.getDocumentDOM();
     var element = doc.selection[0];
-    var libraryItem = element.libraryItem;
-    libraryItem.addData("mark","string","true");
+    selection.forEach(function (ele) {
+        ele.libraryItem.addData("mark","string","true");
+    })
     doc.exitEditMode();
     doc.clipCopy();
     doc.clipPaste(true);
