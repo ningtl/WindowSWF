@@ -3,8 +3,7 @@
  */
 function pasteInPlace(){
     var doc = fl.getDocumentDOM();
-    var element = doc.selection[0];
-    selection.forEach(function (ele) {
+    doc.selection.forEach(function (ele) {
         ele.libraryItem.addData("mark","string","true");
     })
     doc.exitEditMode();
