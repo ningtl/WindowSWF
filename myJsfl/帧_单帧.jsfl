@@ -76,8 +76,6 @@ function insertKeyFrameBySelection() {
 }
 
 // 调用插入关键帧函数
-/*
-*
-* */
 insertKeyFrameBySelection();
+
 

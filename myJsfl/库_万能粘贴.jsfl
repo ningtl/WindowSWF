@@ -19,7 +19,6 @@ function universalPaste(){
     split[split.length-1] = "fla";
     var s = split.join(".");
 
-
     fl.openDocument(s);
     fl.getDocumentDOM().selectAll();
     fl.getDocumentDOM().clipCopy();

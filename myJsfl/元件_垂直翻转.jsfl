@@ -9,42 +9,36 @@ var timeline = doc.getTimeline();
 var selectedObjects = doc.selection;
 // 获取当前选中的对象数组，通过文档对象的'selection'属性获取。
 
-function fangdai(num) {
+function checkDom(num) {
     if (doc == null) {
-        alert("兄弟你的动画文档都打开 怎么搞？");
+        alert("请打开 [.fla] 文件");
         return 1;
     }
     if (selectedObjects.length < 1) {
-        alert("兄弟，你没有选择元件啊， 我要对什么操作呢？");
+        alert("请选择元件");
         return 1;
     }
 }
 
-fliphorizontal();
+flipvertical();
 
-
-function fliphorizontal() {
-    if (fangdai(selectedObjects.length)) return;
-    // 调用 fangdai 函数并传入选中对象的长度作为参数，如果 fangdai 函数返回 1，则立即从 fliphorizontal 函数返回，不执行后续操作。
-
+function flipvertical() {
+    if (checkDom(selectedObjects.length)) return;
+    // 调用 fangdai 函数并传入选中对象的长度作为参数，如果 fangdai 函数返回 1，则立即从 flipvertical 函数返回，不执行后续操作。
     if (timeline.camera.cameraEnabled) {
         // 判断时间轴的相机是否启用。
         timeline.camera.cameraEnabled = false;
         // 如果相机处于启用状态，将其设置为 false，即关闭相机。
     } else {
         // 如果相机没有启用。
-        doc.scaleSelection(-1, 1);
-        // 进行水平翻转操作
+        doc.scaleSelection(1, -1);
+        // 进行垂直翻转操作
         return;
         // 操作完成后直接返回，不进行后续开启相机的操作。
     }
-
-    doc.scaleSelection(-1, 1);
-    // 执行文档对象的 scaleSelection 方法，传入参数 -1 和 1，进行水平翻转操作。
-
+    doc.scaleSelection(1, -1);
+    // 执行文档对象的 scaleSelection 方法，传入参数 1 和 -1，进行垂直翻转操作。
     timeline.camera.cameraEnabled = true;
     // 翻转操作完成后，将时间轴的相机重新设置为启用状态。
 
-    // 取消选中对象
-doc.selectNone();
 }

@@ -1,14 +1,39 @@
+function checkDoc(){
+    if (fl.getDocumentDOM()==null){
+        alert("请打开 [.fla]文件.");
+        return 1;
+    }
+}
+
+function checkSel(){
+    if (fl.getDocumentDOM().selection.length == 0){
+        alert("请在舞台选择 需要操作的 元件");
+        return 1;
+    }
+}
+
+/**
+ * 调用 公用脚本的函数, 需要复制过去. 还未完成
+ * @param method 要调用的方法名
+ * @param args 参数
+ */
+function runUtilFun(method,args){
+    var utilFun = fl.configURI + "WindowSWF/myJsfl/Util.jsfl";
+    fl.runScript(utilFun,method);
+}
+
+
 var doc = fl.getDocumentDOM();//文档
 var selection = doc.selection;//选择
 var library = doc.library;//库文件
 
-function fangdai(num){
-    if (doc==null) {
-        alert("兄弟你的动画文档都打开 怎么搞？")
+function checkDom(num) {
+    if (doc == null) {
+        alert("请打开 [.fla] 文件");
         return 1;
     }
-    if (num === 0){
-        alert("兄弟，你没有选择元件啊， 我要对什么操作呢？");
+    if (selectedObjects.length < 1) {
+        alert("请选择元件？");
         return 1;
     }
 }
