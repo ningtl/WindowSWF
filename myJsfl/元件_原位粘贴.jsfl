@@ -13,9 +13,17 @@ function pasteInPlace(){
 
     var selection = doc.selection;
     selection.forEach(function (ele){
-        if (ele.libraryItem.getData("mark")==="true"){
-            ele.selected= false;
+        if (ele.libraryItem===null){
+            return;
         }
+        try{
+            if (ele.libraryItem.getData("mark")==="true"){
+                ele.selected= false;
+            }
+        }catch (e) {
+            // fl.trace("e=" + e);
+        }
+
     })
     doc.deleteSelection();
 

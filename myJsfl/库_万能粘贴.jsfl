@@ -9,6 +9,7 @@ function universalPaste(){
 
     doc.addNewText({left:36, top:491.3, right:46.2, bottom:508.7});
     doc.setElementProperty('autoExpand', true);
+    fl.getDocumentDOM().selection[0].setTextAttr("face", "Times New Roman");
     doc.clipPaste();
 
     fl.selectTool("arrow");
@@ -18,8 +19,15 @@ function universalPaste(){
     var split = textString.split(".");
     split[split.length-1] = "fla";
     var s = split.join(".");
-
-    fl.openDocument(s);
+    var uri = FLfile.platformPathToURI(s);
+    try{
+        fl.openDocument(uri);
+    }catch (e) {
+        fl.trace("textString = " + textString);
+        fl.trace("获取的文件路径=" + uri);
+        fl.trace("错误信息=" +e);
+        return
+    }
     fl.getDocumentDOM().selectAll();
     fl.getDocumentDOM().clipCopy();
     fl.openDocument(pathURI);
@@ -32,4 +40,3 @@ function traceEle(ele){
         fl.trace("属性 i=" + i + "    值=" + ele[i]);
     }
 }
-
