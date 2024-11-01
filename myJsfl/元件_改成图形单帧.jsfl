@@ -14,10 +14,14 @@ function loopSingerAll(){
     doc.selectNone();
     selection.forEach(function (ele ){
         ele.selected=true;
+
         doc.setElementProperty('symbolType', 'graphic');
-        lib.setItemProperty('symbolType', 'movie clip');
+        lib.selectItem(ele.libraryItem.name,true);
+
+        lib.setItemProperty('symbolType', 'graphic');
         ele.loop="single frame";
         ele.selected=false;
     })
 }
+
 

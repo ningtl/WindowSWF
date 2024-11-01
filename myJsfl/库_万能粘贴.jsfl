@@ -19,7 +19,13 @@ function universalPaste(){
     var split = textString.split(".");
     split[split.length-1] = "fla";
     var s = split.join(".");
-    var uri = FLfile.platformPathToURI(s);
+    var uri = "";
+    if (isMac()){
+        uri = FLfile.platformPathToURI(s);
+    }else {
+        uri = s;
+    }
+
     try{
         fl.openDocument(uri);
     }catch (e) {
@@ -34,6 +40,11 @@ function universalPaste(){
     fl.getDocumentDOM().clipPaste();
 
 }
+
+function isMac() {
+    return (fl.version.search(/mac/i) > -1);
+}
+
 
 function traceEle(ele){
     for (var i in ele) {
