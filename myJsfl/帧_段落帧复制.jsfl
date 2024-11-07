@@ -25,7 +25,7 @@ function repeat(){
         for (var i = 0; i < frequency; i++) {
             var selectedFrames = doc.getTimeline().getSelectedFrames();
             var number = selectedFrames[2]-selectedFrames[1];
-            copyToTargetFrame(number+selectedFrames[1]+1);
+            copyToTargetFrame2(number);
         }
     }
 }
@@ -44,4 +44,19 @@ function copyToTargetFrame(targetFrame) {
     timeline.pasteFrames();
     timeline.setSelectedFrames(selectedFrames);
 }
+function copyToTargetFrame2(targetFrame) {
+    var doc = an.getDocumentDOM();
+    var timeline = doc.getTimeline();
+    var selectedFrames = timeline.getSelectedFrames();
+    timeline.copyFrames();
+    for (var i = 0; i < selectedFrames.length; i+=3) {
+        selectedFrames[i+1]+=targetFrame;
+        selectedFrames[i+2]+=targetFrame;
+        // fl.trace()
+    }
+    timeline.setSelectedFrames(selectedFrames);
+    timeline.pasteFrames();
+    timeline.setSelectedFrames(selectedFrames);
+}
+
 repeat()
