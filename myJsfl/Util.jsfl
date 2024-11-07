@@ -51,6 +51,9 @@ function getKeyFrames(layer){
         i=startFrame;// 跳过 100-95序列
         keyFrames.push(startFrame); //95帧关键帧记录，//索引加1
     }
+    keyFrames.sort(function (a, b) {
+        return a-b;
+    })
     return keyFrames;
 }
 
@@ -82,6 +85,16 @@ function getTimeLine(){
             } else {
                 fl.trace("选中的对象 " + (i + 1) + " 没有有效的库元件或时间轴。");
             }
+        }
+    }
+}
+
+function traceEle(ele) {
+    for (var s in ele) {
+        try {
+            fl.trace(s + " : " + ele[s]);
+        } catch (error) {
+            fl.trace(s + " : Error occurred - " + error.message);
         }
     }
 }

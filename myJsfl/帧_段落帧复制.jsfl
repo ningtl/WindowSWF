@@ -1,28 +1,46 @@
-function copySelectFrame(){
+/**
+ * @author 见水中月
+ */
+
+function repeat(){
+    var action = confirm("跨多帧复制?：确定为跨多帧，取消紧贴帧复制");
+    var targetFrame = 0;
+    var frequency = 0;
+    if (action){
+        targetFrame = prompt("请输入制定要复制到哪个帧:", "0");
+    }else{
+        frequency = prompt("请输入要复制多少段:", "5");
+    }
+    if (targetFrame ==null || frequency == null)return;
+    try{
+        frequency = parseInt(frequency);
+        targetFrame = parseInt(targetFrame);
+    }catch (e){
+        alert("输入数字谢谢");
+        return;
+    }
+    if (action){
+        copyToTargetFrame(targetFrame)
+    }else {
+        for (var i = 0; i < frequency; i++) {
+            var selectedFrames = timeline.getSelectedFrames();
+            var number = selectedFrames[2]-selectedFrames[1];
+            copyToTargetFrame(number)
+        }
+    }
+}
+
+function copyToTargetFrame(targetFrame) {
     var doc = an.getDocumentDOM();
     var timeline = doc.getTimeline();
     var selectedFrames = timeline.getSelectedFrames();
-    var start = selectedFrames[1];
-    if (selectedFrames.length===0){
-        alert("没有选中帧");
-        return;
+    timeline.copyFrames();
+    for (var i = 0; i < selectedFrames.length; i+=3) {
+        selectedFrames[i+1]+=targetFrame;
+        selectedFrames[i+2]+=targetFrame;
     }
-    var end = selectedFrames[selectedFrames.length-1];
-    // traceEle(selectedFrames)
-    //计算选中帧的差值
-    var difference = end - start;
-
-
-    timeline.copyFrames(start,end);
-    timeline.setSelectedFrames(end+1,end+1,true);
-
+    timeline.setSelectedFrames(selectedFrames);
     timeline.pasteFrames();
-    //重新选中
-    timeline.setSelectedFrames(start + difference +1,end + difference +1,true);
+    timeline.currentFrame = selectedFrames[1];
 }
-copySelectFrame()
-function traceEle(ele){
-    for (var i in ele) {
-        fl.trace("属性 i=" + i + "    值=" + ele[i]);
-    }
-}
+repeat()

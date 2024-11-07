@@ -1,29 +1,29 @@
-// 作者：心碎
+// 作者：心碎  - 优化 见水中月
 var doc = fl.getDocumentDOM();
 var timeline = doc.getTimeline();
 var selection = doc.selection;
 headMovement();
 
-function checkDocumentAndSelection() {
+function checkDom() {
     if (doc == null) {
-        alert("兄弟你的动画文档都打开 怎么搞？");
-        return false;
+        alert("请打开 [.fla文件]");
+        return true;
     }
     if (selection.length === 0) {
-        alert("兄弟，你没有选择元件啊， 我要对什么操作呢？");
-        return false;
+        alert("请选择想要旋转的元件？");
+        return true;
     }
-    return true;
+    return false;
 }
 
 function headMovement() {
-    if (!checkDocumentAndSelection()) return;
+    if (checkDom()) return;
 
     // 选择动作
     var action = confirm("选择动作：确定为抬头，取消为低头");
     var actionName = action ? "抬头" : "低头";
 
-    // 自定义参数
+    // 自定义参数 本来想固定15的
     var angle = prompt("请输入" + actionName + "角度 (0-90):", "15");
     if (angle === null) return; // 用户点击取消
     angle = parseFloat(angle);
@@ -32,16 +32,18 @@ function headMovement() {
     if (duration === null) return; // 用户点击取消
     duration = parseInt(duration);
 
-    var easing = prompt("请输入缓动值 (0-100):", "70");
-    if (easing === null) return; // 用户点击取消
-    easing = parseInt(easing);
-
+    // var easing = prompt("请输入缓动值 (0-100):", "70");
+    // if (easing === null) return; // 用户点击取消
+    // easing = parseInt(easing);
+//固定为 100
+    var easing = 100;
     // 参数验证
     angle = Math.min(Math.max(angle, 0), 90);
     duration = Math.max(duration, 2);
     easing = Math.min(Math.max(easing, 0), 100);
 
     var currentFrame = timeline.currentFrame;
+    var currentLayer = timeline.currentLayer;
     var finalFrame = currentFrame + duration;
 
     for (var i = 0; i < selection.length; i++) {
@@ -62,26 +64,36 @@ function headMovement() {
 
         timeline.insertKeyframe(finalFrame);
 
+        timeline.createMotionTween(currentFrame, finalFrame);
+        layer.frames[currentFrame].tweenEasing = easing;
+        timeline.currentFrame+=1;
+
         var finalElement = layer.frames[finalFrame].elements[0];
-        finalElement.rotation = action ? angle : -angle;  // 正值表示抬头，负值表示低头
+        finalElement.selected=true;
+        var rotation =  action ? -angle : angle;  // 正值表示抬头，负值表示低头
+        if (timeline.camera.cameraEnabled){
+            timeline.camera.cameraEnabled = false;
+            doc.rotateSelection(finalElement.matrix.a<0 ? -rotation: rotation)
+            timeline.camera.cameraEnabled = true;
+        }else{
+            doc.rotateSelection(finalElement.matrix.a<0 ? -rotation: rotation)
+        }
 
         // 设置结束帧元件为循环
         if (finalElement.instanceType === "symbol") {
             finalElement.loop = "loop";
         }
+        timeline.setSelectedFrames([currentLayer,timeline.currentFrame,timeline.currentFrame+1])
 
-        timeline.createMotionTween(currentFrame, finalFrame);
-        layer.frames[currentFrame].tweenEasing = easing;
-        timeline.currentFrame+=1;
     }
-
-    // 动画完成后显示提示
-    alert("动画创建完成！\n" +
-        "动作: " + actionName + "\n" +
-        "角度: " + angle + "度\n" +
-        "持续时间: " + duration + "帧\n" +
-        "缓动值: " + easing + "\n" +
-        "起始帧元件设置为单帧，结束帧元件设置为循环");
+    //
+    // // 动画完成后显示提示
+    // alert("动画创建完成！\n" +
+    //     "动作: " + actionName + "\n" +
+    //     "角度: " + angle + "度\n" +
+    //     "持续时间: " + duration + "帧\n" +
+    //     "缓动值: " + easing + "\n" +
+    //     "起始帧元件设置为单帧，结束帧元件设置为循环");
 }
 
 function isKeyFrame(layer, frame) {

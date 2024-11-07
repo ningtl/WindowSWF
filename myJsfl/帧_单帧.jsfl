@@ -1,6 +1,7 @@
 /**
  * @another {b站 见水中月}
  */
+//优化  带上子图层一起单帧
 
 var doc = fl.getDocumentDOM();
 var timeline = doc.getTimeline();
