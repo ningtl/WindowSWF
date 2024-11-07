@@ -36,8 +36,9 @@ function copyToTargetFrame(targetFrame) {
     var selectedFrames = timeline.getSelectedFrames();
     timeline.copyFrames();
     for (var i = 0; i < selectedFrames.length; i+=3) {
-        selectedFrames[i+1]+=targetFrame;
-        selectedFrames[i+2]+=targetFrame;
+        selectedFrames[i+1]=targetFrame-1;
+        selectedFrames[i+2]=targetFrame;
+        // fl.trace()
     }
     timeline.setSelectedFrames(selectedFrames);
     timeline.pasteFrames();
