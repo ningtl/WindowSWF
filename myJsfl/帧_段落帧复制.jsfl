@@ -23,9 +23,9 @@ function repeat(){
         copyToTargetFrame(targetFrame)
     }else {
         for (var i = 0; i < frequency; i++) {
-            var selectedFrames = timeline.getSelectedFrames();
+            var selectedFrames = doc.getTimeline().getSelectedFrames();
             var number = selectedFrames[2]-selectedFrames[1];
-            copyToTargetFrame(number)
+            copyToTargetFrame(number+selectedFrames[1]+1);
         }
     }
 }
@@ -42,6 +42,6 @@ function copyToTargetFrame(targetFrame) {
     }
     timeline.setSelectedFrames(selectedFrames);
     timeline.pasteFrames();
-    timeline.currentFrame = selectedFrames[1];
+    timeline.setSelectedFrames(selectedFrames);
 }
 repeat()
