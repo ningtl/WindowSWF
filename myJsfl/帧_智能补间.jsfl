@@ -30,7 +30,7 @@ function insertTween(){
                 //多余处理
             }
             var duration = frame.duration;//序列片段
-            fl.trace("关键帧" + j);
+            // fl.trace("关键帧" + j);
             j+=duration-1;
         }
     }
