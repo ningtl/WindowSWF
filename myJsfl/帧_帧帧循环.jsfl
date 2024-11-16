@@ -2,19 +2,23 @@
  * @type {Document}
  * @Author 见水中月
  */
-var doc = fl.getDocumentDOM();
-var element = doc.selection[0];
-
-//优化, 当前内部帧的 可能不是关键帧, 设置为初始关键帧
-element.loop = "loop";
-var timeline = element.libraryItem.timeline;
-var layer = timeline.layers[0];
-var keyFrames = getKeyFrames(layer);
-for (var i = 0; i < keyFrames.length; i++) {
-    if (keyFrames[i]===element.firstFrame){
-        element.lastFrame = keyFrames[i+1]-1;
-        break;
+loopElement()
+function loopElement(){
+    var doc = fl.getDocumentDOM();
+    if (doc.selection.length===0){
+        alert("情选择元件在操作");
+        return;
     }
+    var element = doc.selection[0];
+
+    element.loop = "loop";
+    var timeline = element.libraryItem.timeline;
+
+    var layer = timeline.layers[0];
+    var keyFrames = getKeyFrames(layer);
+    var startFrame = layer.frames[element.firstFrame].startFrame;
+    element.firstFrame = startFrame;
+    element.lastFrame = layer.frames[startFrame].duration + startFrame-1;
 }
 
 function getKeyFrames(layer) {
