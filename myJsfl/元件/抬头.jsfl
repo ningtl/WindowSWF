@@ -70,18 +70,44 @@ function headMovement() {
 
         var finalElement = layer.frames[finalFrame].elements[0];
         finalElement.selected=true;
-        var rotation =  action ? -angle : angle;  // 正值表示抬头，负值表示低头
+
         if (timeline.camera.cameraEnabled){
             timeline.camera.cameraEnabled = false;
-            doc.rotateSelection(finalElement.matrix.a<0 ? -rotation: rotation)
+            // 翻转了的
+            if (finalElement.matrix.a < 0){
+                if (action){
+                    doc.rotateSelection(-angle)
+                }else{
+                    doc.rotateSelection(angle)
+                }
+            }else{
+                if (action){
+                    doc.rotateSelection(angle)
+                }else{
+                    doc.rotateSelection(-angle)
+                }
+            }
             timeline.camera.cameraEnabled = true;
         }else{
-            doc.rotateSelection(finalElement.matrix.a<0 ? -rotation: rotation)
+            // 翻转了的
+            if (finalElement.matrix.a < 0){
+                if (action){
+                    doc.rotateSelection(-angle)
+                }else{
+                    doc.rotateSelection(angle)
+                }
+            }else{
+                if (action){
+                    doc.rotateSelection(angle)
+                }else{
+                    doc.rotateSelection(-angle)
+                }
+            }
         }
 
         // 设置结束帧元件为循环
         if (finalElement.instanceType === "symbol") {
-            finalElement.loop = "loop";
+            // finalElement.loop = "loop";
         }
         timeline.setSelectedFrames([currentLayer,timeline.currentFrame,timeline.currentFrame+1])
 

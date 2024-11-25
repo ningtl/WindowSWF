@@ -6,7 +6,6 @@ function insertKeFrame(frame) {
     var doc = fl.getDocumentDOM();
     var timeline = doc.getTimeline();
     var selectedFrames = timeline.getSelectedFrames();
-    alert(selectedFrames.length)
     if (selectedFrames.length === 0){
         return;
     }

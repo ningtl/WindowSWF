@@ -53,7 +53,7 @@ function getChildLayer(parentLayer,layers){
         if (isNaN(rigParentAtFrame)){
             if (parentLayer === rigParentAtFrame){
                 //索引
-                fl.trace(i)
+                // fl.trace(i)
                 childLayers.push(i);
             }
         }
