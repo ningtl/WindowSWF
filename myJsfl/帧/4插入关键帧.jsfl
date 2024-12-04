@@ -3,6 +3,7 @@
  * @param frame
  */
 function insertKeFrame(frame) {
+    alert(111)
     var doc = fl.getDocumentDOM();
     var timeline = doc.getTimeline();
     var selectedFrames = timeline.getSelectedFrames();

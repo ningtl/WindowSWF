@@ -1,6 +1,6 @@
 
-loopSingerAll();
-function loopSingerAll(){
+singleFrame();
+function singleFrame(){
     var doc = fl.getDocumentDOM();
     if (doc==null){
         alert("单帧循环切换: 请打开 [.fla] 文件")

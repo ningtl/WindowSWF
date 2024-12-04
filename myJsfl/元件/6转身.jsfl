@@ -13,13 +13,13 @@ function fangdai(num){
     }
 }
 
-overturn();
+turnAround();
 
 
 //优化 一键翻身。 可以选择多个元件翻转
 // 1.弹出确认框， 确定右边， 错误左边
 // 2。多个元件选择 同时翻转
-function overturn(){
+function turnAround(){
     //防呆判断
     if (fangdai(selection.length)) return;
 
